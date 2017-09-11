@@ -1,0 +1,31 @@
+## set working directory to location where files were unzipped 
+setwd("C:/Users/epetrie/Desktop/Coursera/UCI HAR Dataset")
+
+## read in data
+features <- read.table('./features.txt',header=FALSE)
+activityType <- read.table('./activity_labels.txt',header=FALSE)
+
+subjectTrain <- read.table('./train/subject_train.txt',header=FALSE)
+xTrain <- read.table('./train/x_train.txt',header=FALSE)
+yTrain<- read.table('./train/y_train.txt',header=FALSE)
+
+subjectTest <- read.table('./test/subject_test.txt',header=FALSE)
+xTest <- read.table('./test/x_test.txt',header=FALSE)
+yTest <- read.table('./test/y_test.txt',header=FALSE)
+
+## assign column names 
+colnames(activityType) <- c('activityId','activityType')
+colnames(subjectTrain) <- "subjectId"
+colnames(xTrain) <- features[,2] 
+colnames(yTrain) <- "activityId"
+colnames(subjectTest) <- "subjectId"
+colnames(xTest) <- features[,2] 
+colnames(yTest) <- "activityId"
+
+## merge data sets
+train_data <- cbind(yTrain,subjectTrain,xTrain)
+test_data <- cbind(yTest,subjectTest,xTest)
+all_data <- rbind(train_data,test_data)
+
+##label data set
+all_data_desc <- merge(all_data, activityType, by="activityId", all.x=T) 
